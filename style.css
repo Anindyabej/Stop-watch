@@ -1,0 +1,272 @@
+
+:root {
+    --bg-1: #0b1020;
+    --bg-2: #1b1f4b;
+    --bg-3: #3a2a6b;
+    --text: #f4f6ff;
+    --text-soft: rgba(244, 246, 255, 0.62);
+    --accent: #8f9bff;
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+             max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.stopwatch {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* ---------- Card ---------- */
+
+.stopwatch-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(28px, 7vw, 44px) clamp(20px, 6vw, 36px) clamp(28px, 7vw, 40px);
+    border-radius: 32px;
+    text-align: center;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background:
+        linear-gradient(160deg, rgba(11, 16, 32, 0.55) 0%, rgba(27, 31, 75, 0.78) 100%),
+        url("images/background.png") center / cover no-repeat;
+    box-shadow:
+        0 30px 60px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+        0 1px 0 rgba(255, 255, 255, 0.18) inset;
+    transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+/* soft light sweep on top of the card */
+.stopwatch-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 60% at 50% 0%, rgba(143, 155, 255, 0.22), transparent 60%);
+    pointer-events: none;
+}
+
+/* optional: add class "running" to the card from JS for a gentle glow */
+.stopwatch-card.running {
+    box-shadow:
+        0 30px 70px -20px rgba(0, 0, 0, 0.65),
+        0 0 60px -10px rgba(143, 155, 255, 0.45),
+        0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+/* ---------- Text ---------- */
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    color: var(--text-soft);
+    margin-bottom: clamp(20px, 5vw, 30px);
+}
+
+.timer {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.08em;
+    font-family: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 14vw, 4.4rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 6px 30px rgba(143, 155, 255, 0.35);
+}
+
+.timer span {
+    display: inline-block;
+    min-width: 1.2em;
+    text-align: center;
+}
+
+.timer .separator {
+    min-width: 0;
+    color: var(--accent);
+    opacity: 0.85;
+}
+
+.timer .milliseconds {
+    font-size: 0.55em;
+    color: var(--accent);
+    min-width: 1.3em;
+}
+
+.status {
+    margin-top: clamp(14px, 4vw, 20px);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    letter-spacing: 0.02em;
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 4vw, 22px);
+    margin-top: clamp(28px, 8vw, 40px);
+}
+
+.control-btn {
+    display: grid;
+    place-items: center;
+    width: clamp(56px, 16vw, 66px);
+    height: clamp(56px, 16vw, 66px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+    touch-action: manipulation;
+    box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.18) inset;
+    transition:
+        transform 0.35s var(--ease),
+        background-color 0.35s var(--ease),
+        box-shadow 0.35s var(--ease),
+        border-color 0.35s var(--ease);
+}
+
+.control-btn img {
+    width: 46%;
+    height: 46%;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 0.35s var(--ease);
+}
+
+/* Start is the primary action */
+.start-btn {
+    width: clamp(68px, 20vw, 80px);
+    height: clamp(68px, 20vw, 80px);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: linear-gradient(145deg, #7f8dff 0%, #5a49d6 100%);
+    box-shadow:
+        0 16px 34px -10px rgba(110, 100, 255, 0.7),
+        0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.reset-btn:hover,
+.stop-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+}
+
+.start-btn:hover {
+    box-shadow:
+        0 22px 40px -10px rgba(110, 100, 255, 0.85),
+        0 1px 0 rgba(255, 255, 255, 0.45) inset;
+}
+
+.control-btn:hover img {
+    transform: scale(1.08);
+}
+
+.control-btn:active {
+    transform: translateY(0) scale(0.94);
+    transition-duration: 0.12s;
+}
+
+.control-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* ---------- Small phones ---------- */
+
+@media (max-width: 360px) {
+    .stopwatch-card {
+        border-radius: 26px;
+    }
+
+    .label {
+        letter-spacing: 0.24em;
+    }
+}
+
+/* ---------- Short landscape screens ---------- */
+
+@media (max-height: 520px) and (orientation: landscape) {
+    body {
+        align-items: flex-start;
+    }
+
+    .stopwatch-card {
+        max-width: 520px;
+        padding-top: 22px;
+        padding-bottom: 22px;
+    }
+
+    .controls {
+        margin-top: 20px;
+    }
+}
+
+/* ---------- Larger screens ---------- */
+
+@media (min-width: 768px) {
+    .stopwatch-card {
+        max-width: 460px;
+    }
+
+    .stopwatch-card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

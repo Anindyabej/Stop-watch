@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stopwatch</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="stopwatch">
+
+        <div class="stopwatch-card">
+
+            <p class="label">STOPWATCH</p>
+
+            <div id="display-time" class="timer">
+                <span>00</span>
+                <span class="separator">:</span>
+                <span>00</span>
+                <span class="separator">:</span>
+                <span class="milliseconds">00</span>
+            </div>
+
+            <p class="status">Ready to start</p>
+
+            <div class="controls">
+
+                <button class="control-btn reset-btn" type="button">
+                    <img src="images/reset.png" alt="Reset" onclick="watchReset()">
+                </button>
+
+                <button class="control-btn start-btn" type="button">
+                    <img src="images/start.png" alt="Start" onclick="watchStart()">
+                </button>
+
+                <button class="control-btn stop-btn" type="button">
+                    <img src="images/stop.png" alt="Stop" onclick="watchStop()">
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
